@@ -7,6 +7,16 @@ import {
   CommitFilesResult,
 } from "./interface";
 
+/**
+ * @see https://isomorphic-git.org/docs/en/walk#walkerentry-mode
+ */
+const FILE_MODES = {
+  directory: 0o40000,
+  file: 0o100644,
+  executableFile: 0o100755,
+  symlink: 0o120000,
+} as const;
+
 export const commitChangesFromRepo = async ({
   base,
   repoDirectory = process.cwd(),
@@ -40,12 +50,6 @@ export const commitChangesFromRepo = async ({
     dir: repoDirectory,
     trees,
     map: async (filepath, [commit, workdir]) => {
-      const prevOid = await commit?.oid();
-      const currentOid = await workdir?.oid();
-      // Don't include files that haven't changed, and exist in both trees
-      if (prevOid === currentOid && !commit === !workdir) {
-        return null;
-      }
       // Don't include ignored files
       if (
         await git.isIgnored({
@@ -54,6 +58,20 @@ export const commitChangesFromRepo = async ({
           filepath,
         })
       ) {
+        return null;
+      }
+      if (
+        (await commit?.mode()) === FILE_MODES.symlink ||
+        (await workdir?.mode()) === FILE_MODES.symlink
+      ) {
+        throw new Error(
+          `Unexpected symlink at ${filepath}, GitHub API only supports files and directories. You may need to add this file to .gitignore`,
+        );
+      }
+      const prevOid = await commit?.oid();
+      const currentOid = await workdir?.oid();
+      // Don't include files that haven't changed, and exist in both trees
+      if (prevOid === currentOid && !commit === !workdir) {
         return null;
       }
       // Iterate through anything that may be a directory in either the

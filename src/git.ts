@@ -6,6 +6,7 @@ import {
   CommitFilesFromBuffersArgs,
   CommitFilesResult,
 } from "./interface";
+import { isAbsolute, relative } from "path";
 
 /**
  * @see https://isomorphic-git.org/docs/en/walk#walkerentry-mode
@@ -19,14 +20,18 @@ const FILE_MODES = {
 
 export const commitChangesFromRepo = async ({
   base,
-  repoDirectory = process.cwd(),
+  repoDirectory,
+  addFromDirectory,
+  filterFiles,
   log,
   ...otherArgs
 }: CommitChangesFromRepoArgs): Promise<CommitFilesResult> => {
   const ref = base?.commit ?? "HEAD";
+  const resolvedRepoDirectory =
+    repoDirectory ?? (await git.findRoot({ fs, filepath: process.cwd() }));
   const gitLog = await git.log({
     fs,
-    dir: repoDirectory,
+    dir: resolvedRepoDirectory,
     ref,
     depth: 1,
   });
@@ -36,6 +41,19 @@ export const commitChangesFromRepo = async ({
   if (!oid) {
     throw new Error(`Could not determine oid for ${ref}`);
   }
+
+  if (addFromDirectory && !isAbsolute(addFromDirectory)) {
+    throw new Error(
+      `addFromDirectory must be an absolute path, got ${addFromDirectory}`,
+    );
+  }
+
+  /**
+   * The directory to add files from. This is relative to the repository
+   * root, and is used to filter files.
+   */
+  const relativeStartDirectory =
+    addFromDirectory && relative(resolvedRepoDirectory, addFromDirectory) + "/";
 
   // Determine changed files
   const trees = [git.TREE({ ref: oid }), git.WORKDIR()];
@@ -47,14 +65,14 @@ export const commitChangesFromRepo = async ({
   };
   await git.walk({
     fs,
-    dir: repoDirectory,
+    dir: resolvedRepoDirectory,
     trees,
     map: async (filepath, [commit, workdir]) => {
       // Don't include ignored files
       if (
         await git.isIgnored({
           fs,
-          dir: repoDirectory,
+          dir: resolvedRepoDirectory,
           filepath,
         })
       ) {
@@ -87,6 +105,17 @@ export const commitChangesFromRepo = async ({
       ) {
         // Iterate through these directories
         return true;
+      }
+      if (
+        relativeStartDirectory &&
+        !filepath.startsWith(relativeStartDirectory)
+      ) {
+        // Ignore files that are not in the specified directory
+        return null;
+      }
+      if (filterFiles && !filterFiles(filepath)) {
+        // Ignore out files that don't match any specified filter
+        return null;
       }
       if (!workdir) {
         // File was deleted

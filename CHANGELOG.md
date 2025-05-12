@@ -1,5 +1,19 @@
 # @changesets/ghcommit
 
+## 2.0.2
+
+### Patch Changes
+
+- [`2967b2b`](https://github.com/s0/changests-action-tests/commit/2967b2b683c2ff71c36508c823202a6f4fa204e7) Thanks [@s0](https://github.com/s0)! - v1.5.0 - 01
+
+- [`c34a92e`](https://github.com/s0/changests-action-tests/commit/c34a92ecd7afa66425e34f1f0c909c0dec07a5bd) Thanks [@s0](https://github.com/s0)! - v1.5.1 - 02
+
+- [`1c30f37`](https://github.com/s0/changests-action-tests/commit/1c30f375fadf8582ba4eb4f30f81a3433586d628) Thanks [@s0](https://github.com/s0)! - v1.5.0 - 02
+
+- [`98741f9`](https://github.com/s0/changests-action-tests/commit/98741f98477bd5179f8c1f402bd3f30009e19021) Thanks [@s0](https://github.com/s0)! - v1.5.1 - 01
+
+- [`1de8473`](https://github.com/s0/changests-action-tests/commit/1de84736777b8fa85a6623804b30478668570c93) Thanks [@s0](https://github.com/s0)! - v1.5.0 - 03
+
 ## 2.0.0
 
 ### Major Changes

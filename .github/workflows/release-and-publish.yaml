@@ -33,7 +33,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
       - name: Run Changeset Workflow
-        uses: changesets/action@v1.5.1
+        uses: changesets/action@v1.5.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:

@@ -1,5 +1,23 @@
 # @changesets/ghcommit
 
+## 2.1.0
+
+### Minor Changes
+
+- [`fd8f6e4`](https://github.com/s0/changests-action-tests/commit/fd8f6e4c7b2481dab6c05d992ba8cdcedfd1227b) Thanks [@s0](https://github.com/s0)! - bump with v1.5.0
+
+- [`ed53c51`](https://github.com/s0/changests-action-tests/commit/ed53c51b0e3cc2df456bb3a4af5c54a7da134c33) Thanks [@s0](https://github.com/s0)! - another bump with 1.5.1
+
+### Patch Changes
+
+- [`2ef8ce6`](https://github.com/s0/changests-action-tests/commit/2ef8ce6edbb289b5d03538c56f9b310438f5058f) Thanks [@s0](https://github.com/s0)! - Another patch
+
+- [`5189acc`](https://github.com/s0/changests-action-tests/commit/5189accadd496f1fa9df23f8b21014ba42ffc641) Thanks [@s0](https://github.com/s0)! - test with 1.5.1
+
+- [`763cbc4`](https://github.com/s0/changests-action-tests/commit/763cbc42056d145cf6badb57985bd86cfdd0103c) Thanks [@s0](https://github.com/s0)! - another bump
+
+- [`79c5842`](https://github.com/s0/changests-action-tests/commit/79c58422826a3369a2aef3600b9683a2b890407e) Thanks [@s0](https://github.com/s0)! - Test v1.5.1
+
 ## 2.0.0
 
 ### Major Changes
